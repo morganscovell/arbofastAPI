@@ -1,0 +1,50 @@
+SignupRequest:
+    type: object
+    required:
+        - username
+        - email
+        - password
+        - phone
+        - address
+
+    properties:
+        username:
+            type: string
+            minLength: 3
+            maxLength: 20
+            example: Abdul Haseeb
+
+        email:
+            type: string
+            format: email
+            example: haseeb@gmail.com
+
+        password:
+            type: string
+            minLength: 8
+            maxLength: 15
+            example: Password@123
+
+        phone:
+            type: string
+            example: '+923001234567'
+
+        address:
+            type: string
+            example: Karachi, Sindh
+
+SigninRequest:
+    type: object
+    required:
+        - email
+        - password
+
+    properties:
+        email:
+            type: string
+            format: email
+            example: haseeb@gmail.com
+
+        password:
+            type: string
+            example: Password@123

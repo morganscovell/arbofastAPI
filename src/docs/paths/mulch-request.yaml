@@ -1,0 +1,239 @@
+/mulch-requests/admin:
+    get:
+        summary: Get all mulch requests (Admin)
+        description: Returns all mulch requests. Admin access only.
+        tags:
+            - Mulch Request
+
+        security:
+            - bearerAuth: []
+
+        parameters:
+            - in: query
+              name: page
+              schema:
+                  type: integer
+                  default: 1
+                  minimum: 1
+              description: Page number
+
+            - in: query
+              name: limit
+              schema:
+                  type: integer
+                  default: 10
+                  minimum: 1
+                  maximum: 100
+              description: Number of records per page (max 100)
+
+        responses:
+            '200':
+                description: All mulch requests fetched successfully
+
+            '401':
+                description: Unauthorized user
+
+            '403':
+                description: Admin access required
+
+            '500':
+                description: Internal server error
+
+/mulch-requests:
+    get:
+        summary: Get logged-in user's mulch requests
+        description: Returns all mulch requests of authenticated user
+        tags:
+            - Mulch Request
+
+        security:
+            - bearerAuth: []
+
+        parameters:
+            - in: query
+              name: page
+              schema:
+                  type: integer
+                  default: 1
+                  minimum: 1
+              description: Page number
+
+            - in: query
+              name: limit
+              schema:
+                  type: integer
+                  default: 10
+                  minimum: 1
+                  maximum: 100
+              description: Number of records per page (max 100)
+
+        responses:
+            '200':
+                description: User mulch requests fetched successfully
+
+            '401':
+                description: Unauthorized user
+
+/mulch-request:
+    post:
+        summary: Create mulch request
+        description: Create a new mulch request with photo upload
+        tags:
+            - Mulch Request
+
+        security:
+            - bearerAuth: []
+
+        requestBody:
+            required: true
+            content:
+                multipart/form-data:
+                    schema:
+                        $ref: '#/components/schemas/CreateMulchRequest'
+
+        responses:
+            '201':
+                description: Mulch request saved successfully
+
+            '400':
+                description: Validation failed
+
+            '401':
+                description: Unauthorized user
+
+            '500':
+                description: Internal server error
+
+    put:
+        summary: Update mulch request
+        description: Update existing mulch request
+        tags:
+            - Mulch Request
+
+        security:
+            - bearerAuth: []
+
+        requestBody:
+            required: true
+            content:
+                multipart/form-data:
+                    schema:
+                        $ref: '#/components/schemas/UpdateMulchRequest'
+
+        responses:
+            '200':
+                description: Mulch request updated successfully
+
+            '400':
+                description: Invalid request data
+
+            '401':
+                description: Unauthorized user
+
+            '500':
+                description: Internal server error
+
+/mulch-request/{id}:
+    get:
+        summary: Get mulch request by id
+        description: Returns mulch request details by request id
+        tags:
+            - Mulch Request
+
+        security:
+            - bearerAuth: []
+
+        parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                  type: integer
+              example: 1
+
+        responses:
+            '200':
+                description: Mulch request data fetched successfully
+
+            '400':
+                description: Invalid mulch request id
+
+            '401':
+                description: Unauthorized user
+
+            '500':
+                description: Internal server error
+
+    delete:
+        summary: Delete mulch request
+        description: Deletes mulch request by id
+        tags:
+            - Mulch Request
+
+        security:
+            - bearerAuth: []
+
+        parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                  type: integer
+              example: 1
+
+        responses:
+            '200':
+                description: Mulch request deleted successfully
+
+            '400':
+                description: Invalid mulch request id
+
+            '401':
+                description: Unauthorized user
+
+            '500':
+                description: Internal server error
+
+/mulch-request/status:
+    patch:
+        summary: Update mulch request status
+        description: Update the status of a mulch request.
+        tags:
+            - Mulch Request
+
+        security:
+            - bearerAuth: []
+
+        requestBody:
+            required: true
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        required:
+                            - id
+                            - status
+                        properties:
+                            id:
+                                type: integer
+                                example: 1
+                            status:
+                                type: string
+                                enum:
+                                    - PENDING
+                                    - DECLINED
+                                    - APPROVED
+                                example: APPROVED
+
+        responses:
+            '200':
+                description: Mulch request status updated successfully
+
+            '400':
+                description: Invalid request
+
+            '401':
+                description: Unauthorized
+
+            '500':
+                description: Internal server error

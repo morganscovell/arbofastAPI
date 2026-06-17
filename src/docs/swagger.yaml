@@ -1,0 +1,28 @@
+openapi: 3.0.0
+
+info:
+    title: Scheduling App API
+    version: 3.0.0
+    description: API Documentation
+
+servers:
+    - url: http://localhost:5100/api
+      description: Local Server
+
+    - url: http://138.68.1.158:5100/api
+      description: Testing Server
+
+components:
+    securitySchemes:
+        bearerAuth:
+            type: http
+            scheme: bearer
+            bearerFormat: JWT
+
+tags:
+    - name: Auth
+    - name: Profile
+    - name: Mulch Request
+    - name: Work Item
+    - name: Estimate
+    - name: Invoice

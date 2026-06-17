@@ -1,0 +1,37 @@
+/send-invoice/{estimateId}:
+    get:
+        summary: Send invoice email for an estimate
+        description: Sends the invoice PDF to the customer associated with the estimate. Admin access required.
+
+        tags:
+            - Invoice
+
+        security:
+            - bearerAuth: []
+
+        parameters:
+            - in: path
+              name: estimateId
+              required: true
+              schema:
+                  type: integer
+              description: Estimate ID
+
+        responses:
+            '200':
+                description: Invoice sent successfully
+
+            '400':
+                description: Invalid estimate ID
+
+            '401':
+                description: Unauthorized user
+
+            '404':
+                description: Estimate not found
+
+            '403':
+                description: Admin access required
+
+            '500':
+                description: Internal server error

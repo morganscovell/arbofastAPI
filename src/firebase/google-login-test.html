@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Firebase Google Login (CDN)</title>
+</head>
+
+<body>
+    <h2>Google Login Test (Firebase CDN)</h2>
+
+    <button onclick="login()">Login with Google</button>
+    <button onclick="logout()">Logout</button>
+
+    <pre id="output"></pre>
+
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: 'AIzaSyBPgiiemlpofwUChSSNZ6gzaq3NTris6mk',
+            authDomain: 'g-tree-app-testing.firebaseapp.com',
+            projectId: 'g-tree-app-testing'
+        };
+
+        firebase.initializeApp(firebaseConfig);
+
+        const auth = firebase.auth();
+        const provider = new firebase.auth.GoogleAuthProvider();
+
+        const output = document.getElementById('output');
+
+        async function login() {
+            try {
+                const result = await auth.signInWithPopup(provider);
+
+                const user = result.user;
+                const token = await user.getIdToken();
+
+                output.innerText = 'Email: ' + user.email + '\n\n' + 'UID: ' + user.uid + '\n\n' + 'ID Token:\n' + token;
+
+                console.log('User:', user);
+                console.log('Token:', token);
+
+                const response = await fetch('http://localhost:5100/api/verify-token', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+
+                const data = await response.json();
+
+                console.log('Backend Response:', data);
+                output.innerText += '\n\nBackend Response:\n' + JSON.stringify(data, null, 2);
+            } catch (err) {
+                console.error(err);
+                output.innerText = 'Error: ' + err.message;
+            }
+        }
+
+        // LOGOUT
+        async function logout() {
+            await auth.signOut();
+            output.innerText = 'Logged out';
+        }
+
+        // AUTH STATE LISTENER
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                console.log('Logged in:', user.email);
+            } else {
+                console.log('Logged out');
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,206 @@
+/profile:
+    patch:
+        summary: Update user profile
+        tags:
+            - Profile
+
+        security:
+            - bearerAuth: []
+
+        requestBody:
+            required: true
+            content:
+                multipart/form-data:
+                    schema:
+                        type: object
+                        required:
+                            - username
+                            - phone
+                        properties:
+                            username:
+                                type: string
+                                minLength: 3
+                                maxLength: 20
+                                example: John Doe
+
+                            phone:
+                                type: string
+                                nullable: true
+                                example: '+923001234567'
+
+                            photo:
+                                type: string
+                                format: binary
+                                nullable: true
+                                description: |
+                                    Optional profile image.
+                                    - Upload a new file to replace the existing profile image
+                                    # - Send null or an empty value to remove the current profile image
+
+                            photoUrl:
+                                type: string
+                                nullable: true
+                                example: '1835757272o2ji2b26w241.png'
+                                description: |
+                                    Optional existing profile image URL or file name.
+                                    - Use this field when not uploading a new image through the photo field
+                                    - Send the existing ImageKit image URL/file name to keep the current image
+                                    - Send null or an empty value in both photo and photoUrl fields to remove the profile image
+
+        responses:
+            '200':
+                description: Profile updated successfully
+
+            '400':
+                description: Invalid request
+
+            '401':
+                description: Unauthorized
+
+            '500':
+                description: Internal server error
+
+/password:
+    patch:
+        summary: Change password
+        tags:
+            - Profile
+
+        security:
+            - bearerAuth: []
+
+        requestBody:
+            required: true
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        required:
+                            - currentPassword
+                            - newPassword
+                            - confirmPassword
+                        properties:
+                            currentPassword:
+                                type: string
+                                example: Password@123
+
+                            newPassword:
+                                type: string
+                                example: Password@12345
+
+                            confirmPassword:
+                                type: string
+                                example: Password@12345
+
+        responses:
+            '200':
+                description: Password changed successfully
+
+            '400':
+                description: Invalid request
+
+            '401':
+                description: Unauthorized
+
+            '500':
+                description: Internal server error
+
+/address:
+    post:
+        summary: Add new address
+        tags:
+            - Profile
+
+        security:
+            - bearerAuth: []
+
+        requestBody:
+            required: true
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        required:
+                            - address
+                            - type
+                        properties:
+                            address:
+                                type: string
+                                example: House 12, Street 5, Karachi
+
+                            type:
+                                type: string
+                                example: Home
+
+        responses:
+            '201':
+                description: Address added successfully
+
+            '400':
+                description: Invalid request
+
+            '401':
+                description: Unauthorized
+
+            '500':
+                description: Internal server error
+
+/address/{id}:
+    delete:
+        summary: Delete address
+        tags:
+            - Profile
+
+        security:
+            - bearerAuth: []
+
+        parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                  type: integer
+              example: 1
+
+        responses:
+            '200':
+                description: Address deleted successfully
+
+            '400':
+                description: Invalid request
+
+            '401':
+                description: Unauthorized
+
+            '500':
+                description: Internal server error
+
+/make-address-default/{id}:
+    patch:
+        summary: Make address default
+        tags:
+            - Profile
+
+        security:
+            - bearerAuth: []
+
+        parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                  type: integer
+              example: 1
+
+        responses:
+            '200':
+                description: Address set as default successfully
+
+            '400':
+                description: Invalid request
+
+            '401':
+                description: Unauthorized
+
+            '500':
+                description: Internal server error

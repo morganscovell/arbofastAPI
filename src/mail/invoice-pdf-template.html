@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Invoice</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                font-size: 12px;
+                color: #1a1a1a;
+                margin: 0;
+                padding: 0;
+            }
+
+            .main {
+                padding: 32px 28px;
+            }
+
+            .row {
+                display: flex;
+                width: 100%;
+            }
+
+            .justify-end {
+                justify-content: flex-end;
+            }
+
+            .right {
+                text-align: right;
+            }
+
+            .mt-10 {
+                margin-top: 10px;
+            }
+
+            .mt-15 {
+                margin-top: 15px;
+            }
+
+            .mt-20 {
+                margin-top: 20px;
+            }
+
+            .invoice-title {
+                color: #56612b;
+                font-size: 14px;
+                margin: 10px 0;
+                font-weight: bold;
+            }
+
+            .bill-box {
+                flex: 1;
+                padding-left: 35px;
+            }
+
+            .label {
+                color: #8a9b44;
+                font-weight: bold;
+                font-size: 12px;
+            }
+
+            /* Table Styling */
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 18px;
+                page-break-inside: auto;
+            }
+
+            thead {
+                background: #c5d67c;
+                color: #56612b;
+                font-weight: bold;
+                display: table-header-group;
+            }
+
+            th,
+            td {
+                padding: 6px;
+                border-bottom: 1px dashed #8a9b44;
+            }
+
+            td.right,
+            th.right {
+                text-align: right;
+            }
+
+            /* Prevent row split */
+            tr {
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
+
+            .summary-box {
+                margin-top: 20px;
+                display: flex;
+            }
+
+            .summary-left {
+                flex: 1;
+                font-size: 10px;
+                color: gray;
+            }
+
+            .summary-right {
+                flex: 1;
+                font-size: 12px;
+            }
+
+            .summary-row {
+                display: flex;
+                justify-content: space-between;
+                padding: 8px 0;
+                border-bottom: 1px dashed #8a9b44;
+            }
+
+            .paid-text {
+                color: green;
+                font-size: 20px;
+                font-weight: bold;
+                text-align: right;
+                margin-top: 20px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="main">
+            <!-- Header -->
+            <div class="row justify-end">
+                <div class="right">
+                    <img src="{{logoUrl}}" width="80" height="40" crossorigin="anonymous" />
+                    <div style="color: #56612b; font-weight: bold">4HT GENERATION TREE</div>
+                </div>
+            </div>
+
+            <div class="invoice-title">INVOICE</div>
+
+            <!-- Billing -->
+            <div class="row">
+                <div class="bill-box">
+                    <div class="label">BILL TO</div>
+                    <div>{{fullname}}</div>
+                    <div>{{address}}</div>
+                </div>
+
+                <div class="bill-box">
+                    <div class="label">SHIP TO</div>
+                    <div>{{fullname}}</div>
+                    <div>{{address}}</div>
+                </div>
+            </div>
+
+            <!-- Invoice Meta -->
+            <div class="row" style="justify-content: space-between; border-bottom: 1px dashed #8a9b44; padding: 15px 0 8px">
+                <div>
+                    <div class="label">Invoice #</div>
+                    <div>{{invoiceNumber}}</div>
+                </div>
+                <div>
+                    <div class="label">DATE</div>
+                    <div>{{date}}</div>
+                </div>
+                <div>
+                    <div class="label">TERMS</div>
+                    <div>Due on receipt</div>
+                </div>
+                <div>
+                    <div class="label">Due Date</div>
+                    <div>{{date}}</div>
+                </div>
+            </div>
+
+            <!-- Items Table -->
+            <table>
+                <thead>
+                    <tr>
+                        <th width="60%">ACTIVITY</th>
+                        <th class="right" width="10%">QTY</th>
+                        <th class="right" width="10%">RATE</th>
+                        <th class="right" width="20%">AMOUNT</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {{itemsHtml}}
+                </tbody>
+            </table>
+
+            <!-- Summary -->
+            <div class="summary-box">
+                <div class="summary-left">
+                    <div><strong>Reminder To Customers:</strong></div>
+                    <div>4th Generation Tree and A&T Arborists have officially merged under the A&T Arborist Corporation.</div>
+                </div>
+
+                <div class="summary-right">
+                    <div class="summary-row">
+                        <div class="label">PAYMENT</div>
+                        <div>${{total}}</div>
+                    </div>
+                    <div class="summary-row" style="border-bottom: none">
+                        <div class="label">BALANCE DUE</div>
+                        <div style="font-size: 16px; font-weight: bold">$0.00</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="paid-text">PAID</div>
+        </div>
+    </body>
+</html>

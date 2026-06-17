@@ -1,0 +1,77 @@
+CreateMulchRequest:
+    type: object
+    required:
+        - amountPreference
+        - username
+        - phone
+        - address
+        # - latitude
+        # - longitude
+        # - photo
+        # - userId
+
+    properties:
+        amountPreference:
+            type: string
+            enum:
+                - FULL
+                - HALF
+                - ANY
+            example: ANY
+
+        username:
+            type: string
+            minLength: 3
+            maxLength: 50
+            example: Abdul Haseeb
+
+        phone:
+            type: string
+            example: '+923001234567'
+
+        address:
+            type: string
+            example: Karachi, Sindh
+
+        latitude:
+            type: number
+            nullable: true
+            example: 24.8607
+
+        longitude:
+            type: number
+            nullable: true
+            example: 67.0011
+
+        photo:
+            type: string
+            format: binary
+            nullable: true
+            description: Optional mulch image upload
+
+        instruction:
+            type: string
+            nullable: true
+            example: Leave mulch near gate
+
+        # userId:
+        #     type: integer
+        #     nullable: true
+        #     example: 1
+
+UpdateMulchRequest:
+    allOf:
+        - $ref: '#/components/schemas/CreateMulchRequest'
+        - type: object
+          required:
+              - id
+
+          properties:
+              id:
+                  type: integer
+                  example: 1
+
+              photoUrl:
+                  type: string
+                  nullable: true
+                  example: mulch-photo.jpg

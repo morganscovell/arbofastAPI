@@ -1,0 +1,388 @@
+EstimateStatus:
+    type: string
+    enum:
+        - PENDING
+        - ACCEPTED
+        - SENT_TO_QUICKBOOK
+        - DRAFT
+        - APPROVED
+    example: PENDING
+
+Hazards:
+    type: string
+    enum:
+        - POWER_LINES
+        - STRUCTURE_NEARBY
+        - ROAD/TRAFFIC
+        - STEEP_SLOPE
+        - LIMITED_ACCESS
+        - SEPTIC/UNDERGROUND_UTILITIES
+        - DEAD/HAZARDOUS_TREE_CONDITION
+        - LEAN/OVER_TARGET
+        - TIGHT_DROPZONE
+
+EquipmentOrCrewOptions:
+    type: string
+    enum:
+        - CLIMB_CREW
+        - BUCKET_TRUCK_AERIAL_LIFT
+        - CRANE
+        - RIGGING_ONLY_NO_LIFT_NEEDED
+        - CHIPPER
+        - CHIPPER_TRUCK
+        - DUMP_TRAILER
+        - HAUL_OFF_REMOVE_MATERIAL
+        - SMALL_STUMP_GRINDER
+        - LARGE_STUMP_GRINDER
+        - LOADER_SKID_STEER
+        - TRACTOR
+        - TIGHT_ACCESS_NO_EQUIPMENT_ACCESS
+        - BACKYARD_ONLY
+        - STEEP_TERRAIN
+        - PERMIT_REQUIRED
+        - TRAFFIC_CONTROL
+        - LANE_CLOSURE
+        - SIGNS
+        - STANDARD_CREW
+        - EXTRA_CREW
+        - CRANE_CREW
+        - PLYWOOD
+        - DOLLY
+        - WHEELBARROW
+        - BIG_BAR
+        - HAND_CARRY_ONLY
+        - POWER_LINE_PROXIMITY
+
+TreeSpecie:
+    type: string
+    enum:
+        - NOT_SURE
+        - OAK
+        - PINE
+        - REDWOOD
+        - EUCALYPTUS
+        - PALM
+        - MAPLE
+        - ELM
+        - SYCAMORE
+        - COTTONWOOD
+        - WILLOW
+        - OLIVE
+        - PEPPER_TREE
+        - FRUIT_TREE
+        - ORNAMENTAL_TREE
+        - SHRUB/BUSH
+
+WorkItemScope:
+    type: string
+    enum:
+        - PRUNE_CLASS_1
+        - PRUNE_CLASS_2
+        - PRUNE_CLASS_3
+        - RAISE_CANOPY
+        - STANDARD_CLEARANCE
+        - NO_OVER_HANG
+        - CROWN_REDUCTION
+        - ARBORIST_RECOMMENDATION
+        - PALM_TREE_PRUNING
+        - FRUIT_TREE_PRUNING
+        - TREE_REMOVAL
+        - STUMP_GRINDING_OPTION_A
+        - STUMP_GRINDING_OPTION_B
+        - STUMP_GRINDING_OPTION_C
+        - CUSTOM_SERVICE
+        - SELECTIVE_THINNING
+        - REMOVE_DEAD_WOOD
+        - WEIGHT_REDUCTION
+        - TREE_SPRAYING
+
+WorkItemImageType:
+    type: string
+    enum:
+        - FULL_VIEW
+        - TRUNK/BASE
+        - CROWN/CANOPY
+        - STUMP
+        - WORK_AREA
+
+WorkItemLocation:
+    type: string
+    enum:
+        - FRONT_YARD
+        - BACK_YARD
+        - SIDE_YARD
+        - NEAR_HOUSE
+        - UNKNOWN
+
+WorkItemImage:
+    type: object
+    properties:
+        id:
+            type: integer
+            example: 1
+        url:
+            type: string
+            example: https://cdn.example.com/tree-image.jpg
+        type:
+            $ref: '#/components/schemas/WorkItemImageType'
+        config:
+            type: string
+            nullable: true
+            example: null
+        workItemId:
+            type: integer
+            nullable: true
+            example: 10
+
+WorkItem:
+    type: object
+    properties:
+        id:
+            type: integer
+            example: 1
+        treeSpecie:
+            $ref: '#/components/schemas/TreeSpecie'
+        quantity:
+            type: integer
+            example: 2
+        scopes:
+            type: array
+            items:
+                $ref: '#/components/schemas/WorkItemScope'
+        raiseCanopyFeet:
+            type: integer
+            nullable: true
+            example: 10
+        crownReductionPercentage:
+            type: integer
+            nullable: true
+            example: 20
+        customServiceNote:
+            type: string
+            nullable: true
+        desiredTimeFrame:
+            type: string
+            nullable: true
+        noCleanUp:
+            type: boolean
+            nullable: true
+        woodHandling:
+            type: string
+            nullable: true
+            enum:
+                - LEAVE
+                - HAUL
+                - CUT
+        woodLengthToBeCut:
+            type: number
+            nullable: true
+            format: float
+        debrisHandling:
+            type: string
+            nullable: true
+            enum:
+                - LEAVE
+                - HAUL
+        accessOption:
+            $ref: '#/components/schemas/WorkItemLocation'
+        accessOptionNote:
+            type: string
+            nullable: true
+        laborCost:
+            type: number
+            nullable: true
+            format: float
+        estimatedHours:
+            type: number
+            nullable: true
+            format: float
+        note:
+            type: string
+            nullable: true
+        images:
+            type: array
+            items:
+                $ref: '#/components/schemas/WorkItemImage'
+
+Estimate:
+    type: object
+    properties:
+        id:
+            type: integer
+            example: 1
+        username:
+            type: string
+            minLength: 3
+            maxLength: 30
+            example: John Doe
+        email:
+            type: string
+            format: email
+            example: john@example.com
+        phone:
+            type: string
+            example: +923001234567
+        address:
+            type: string
+            example: Karachi, Pakistan
+        latitude:
+            type: number
+            nullable: true
+            minimum: -90
+            maximum: 90
+        longitude:
+            type: number
+            nullable: true
+            minimum: -180
+            maximum: 180
+        status:
+            $ref: '#/components/schemas/EstimateStatus'
+        noteOrInstruction:
+            type: string
+            nullable: true
+        userId:
+            type: integer
+            nullable: true
+        equipmentOrCrewOptions:
+            type: array
+            nullable: true
+            items:
+                $ref: '#/components/schemas/EquipmentOrCrewOptions'
+        hazards:
+            type: array
+            nullable: true
+            items:
+                $ref: '#/components/schemas/Hazards'
+        workItems:
+            type: array
+            items:
+                $ref: '#/components/schemas/WorkItem'
+
+CreateUserEstimateRequest:
+    type: object
+    required:
+        - workItems
+    properties:
+        workItems:
+            type: array
+            minItems: 1
+            items:
+                type: integer
+            example: [1, 2]
+        noteOrInstruction:
+            type: string
+            nullable: true
+            example: null
+
+UpdateUserEstimateRequest:
+    allOf:
+        - $ref: '#/components/schemas/CreateUserEstimateRequest'
+        - type: object
+          required:
+              - id
+          properties:
+              id:
+                  type: integer
+                  example: 1
+                  description: Estimate ID
+
+AdminCreateEstimateRequest:
+    type: object
+    required:
+        - username
+        - email
+        - phone
+        - address
+        - workItems
+    properties:
+        username:
+            type: string
+            minLength: 3
+            maxLength: 30
+            example: 'Abdul Haseeb'
+        email:
+            type: string
+            format: email
+            example: haseeb@gmail.com
+        phone:
+            type: string
+            example: '+923001234567'
+        address:
+            type: string
+            minLength: 3
+            example: 'Karachi, Sindh, Pakistan.'
+        latitude:
+            type: number
+            nullable: true
+            example: null
+        longitude:
+            type: number
+            nullable: true
+            example: null
+        status:
+            $ref: '#/components/schemas/EstimateStatus'
+            example: ''
+        noteOrInstruction:
+            type: string
+            nullable: true
+            example: null
+        userId:
+            type: integer
+            nullable: true
+            example: null
+        hazards:
+            type: array
+            nullable: true
+            example: null
+            items:
+                $ref: '#/components/schemas/Hazards'
+        equipmentOrCrewOptions:
+            type: array
+            nullable: true
+            example: null
+            items:
+                $ref: '#/components/schemas/EquipmentOrCrewOptions'
+        workItems:
+            type: array
+            minItems: 1
+            items:
+                type: integer
+            example: [1]
+
+AdminUpdateEstimateRequest:
+    allOf:
+        - $ref: '#/components/schemas/AdminCreateEstimateRequest'
+        - type: object
+          required:
+              - id
+          properties:
+              id:
+                  type: integer
+                  example: 1
+                  description: Estimate ID
+
+EstimatePaginationResponse:
+    type: object
+    properties:
+        total:
+            type: integer
+            example: 50
+        page:
+            type: integer
+            example: 1
+        limit:
+            type: integer
+            example: 10
+        totalPages:
+            type: integer
+            example: 5
+
+EstimateListResponse:
+    type: object
+    properties:
+        data:
+            type: array
+            items:
+                $ref: '#/components/schemas/Estimate'
+        pagination:
+            $ref: '#/components/schemas/EstimatePaginationResponse'

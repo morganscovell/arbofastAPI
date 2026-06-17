@@ -1,0 +1,348 @@
+WorkItemImage:
+    type: object
+    properties:
+        id:
+            type: integer
+            example: 1
+
+        url:
+            type: string
+            example: 'uploads/image-123.jpg'
+
+        type:
+            type: string
+            enum:
+                - FULL_VIEW
+                - TRUNK/BASE
+                - CROWN/CANOPY
+                - STUMP
+                - WORK_AREA
+            nullable: true
+            example: FULL_VIEW
+
+        config:
+            type: object
+            nullable: true
+
+        workItemId:
+            type: integer
+            nullable: true
+
+# -------------------------
+
+CreateWorkItemRequest:
+    type: object
+
+    required:
+        - treeSpecie
+        - quantity
+        - scopes
+        - accessOption
+        - images
+
+    properties:
+        treeSpecie:
+            type: string
+            enum:
+                - NOT_SURE
+                - OAK
+                - PINE
+                - REDWOOD
+                - EUCALYPTUS
+                - PALM
+                - MAPLE
+                - ELM
+                - SYCAMORE
+                - COTTONWOOD
+                - WILLOW
+                - OLIVE
+                - PEPPER_TREE
+                - FRUIT_TREE
+                - ORNAMENTAL_TREE
+                - SHRUB/BUSH
+            example: OAK
+
+        quantity:
+            type: integer
+            minimum: 1
+            example: 1
+
+        scopes:
+            type: array
+            items:
+                type: string
+                enum:
+                    - PRUNE_CLASS_1
+                    - PRUNE_CLASS_2
+                    - PRUNE_CLASS_3
+                    - RAISE_CANOPY
+                    - STANDARD_CLEARANCE
+                    - NO_OVER_HANG
+                    - CROWN_REDUCTION
+                    - ARBORIST_RECOMMENDATION
+                    - PALM_TREE_PRUNING
+                    - FRUIT_TREE_PRUNING
+                    - TREE_REMOVAL
+                    - STUMP_GRINDING_OPTION_A
+                    - STUMP_GRINDING_OPTION_B
+                    - STUMP_GRINDING_OPTION_C
+                    - CUSTOM_SERVICE
+                    - SELECTIVE_THINNING
+                    - REMOVE_DEAD_WOOD
+                    - WEIGHT_REDUCTION
+                    - TREE_SPRAYING
+
+        raiseCanopyFeet:
+            type: number
+            nullable: true
+            example: null
+
+        crownReductionPercentage:
+            type: number
+            nullable: true
+            example: null
+
+        customServiceNote:
+            type: string
+            nullable: true
+            example: null
+
+        desiredTimeFrame:
+            type: string
+            nullable: true
+            example: null
+
+        noCleanUp:
+            type: boolean
+            nullable: true
+            example: null
+
+        woodHandling:
+            type: string
+            enum: [LEAVE, HAUL, CUT]
+            nullable: true
+            example: null
+
+        woodLengthToBeCut:
+            type: number
+            nullable: true
+            example: null
+
+        debrisHandling:
+            type: string
+            enum: [LEAVE, HAUL]
+            nullable: true
+            example: null
+
+        accessOption:
+            type: string
+            enum: [FRONT_YARD, BACK_YARD, SIDE_YARD, NEAR_HOUSE, UNKNOWN]
+
+        accessOptionNote:
+            type: string
+            nullable: true
+            example: null
+
+        laborCost:
+            type: number
+            nullable: true
+            example: null
+
+        estimatedHours:
+            type: number
+            nullable: true
+            example: null
+
+        note:
+            type: string
+            nullable: true
+            example: null
+
+        images:
+            type: array
+            items:
+                $ref: '#/components/schemas/WorkItemImage'
+
+# -------------------------
+
+UpdateWorkItemRequest:
+    type: object
+
+    required:
+        - id
+        - treeSpecie
+        - quantity
+        - scopes
+        - accessOption
+        - images
+
+    properties:
+        id:
+            type: integer
+            example: 1
+
+        treeSpecie:
+            type: string
+            enum:
+                - NOT_SURE
+                - OAK
+                - PINE
+                - REDWOOD
+                - EUCALYPTUS
+                - PALM
+                - MAPLE
+                - ELM
+                - SYCAMORE
+                - COTTONWOOD
+                - WILLOW
+                - OLIVE
+                - PEPPER_TREE
+                - FRUIT_TREE
+                - ORNAMENTAL_TREE
+                - SHRUB/BUSH
+
+        quantity:
+            type: integer
+            minimum: 1
+
+        scopes:
+            type: array
+            items:
+                type: string
+
+        raiseCanopyFeet:
+            type: number
+            nullable: true
+
+        crownReductionPercentage:
+            type: number
+            nullable: true
+
+        customServiceNote:
+            type: string
+            nullable: true
+
+        desiredTimeFrame:
+            type: string
+            nullable: true
+
+        noCleanUp:
+            type: boolean
+            nullable: true
+
+        woodHandling:
+            type: string
+            enum: [LEAVE, HAUL, CUT]
+            nullable: true
+
+        woodLengthToBeCut:
+            type: number
+            nullable: true
+
+        debrisHandling:
+            type: string
+            enum: [LEAVE, HAUL]
+            nullable: true
+
+        accessOption:
+            type: string
+            enum: [FRONT_YARD, BACK_YARD, SIDE_YARD, NEAR_HOUSE, UNKNOWN]
+
+        accessOptionNote:
+            type: string
+            nullable: true
+
+        laborCost:
+            type: number
+            nullable: true
+
+        estimatedHours:
+            type: number
+            nullable: true
+
+        note:
+            type: string
+            nullable: true
+
+        images:
+            type: array
+            items:
+                $ref: '#/components/schemas/WorkItemImage'
+
+# -------------------------
+
+WorkItemResponse:
+    type: object
+
+    properties:
+        id:
+            type: integer
+
+        treeSpecie:
+            type: string
+
+        quantity:
+            type: integer
+
+        scopes:
+            type: array
+            items:
+                type: string
+
+        raiseCanopyFeet:
+            type: number
+            nullable: true
+
+        crownReductionPercentage:
+            type: number
+            nullable: true
+
+        customServiceNote:
+            type: string
+            nullable: true
+
+        desiredTimeFrame:
+            type: string
+            nullable: true
+
+        noCleanUp:
+            type: boolean
+            nullable: true
+
+        woodHandling:
+            type: string
+            enum: [LEAVE, HAUL, CUT]
+            nullable: true
+
+        woodLengthToBeCut:
+            type: number
+            nullable: true
+
+        debrisHandling:
+            type: string
+            enum: [LEAVE, HAUL]
+            nullable: true
+
+        accessOption:
+            type: string
+
+        accessOptionNote:
+            type: string
+            nullable: true
+
+        laborCost:
+            type: number
+            nullable: true
+
+        estimatedHours:
+            type: number
+            nullable: true
+
+        note:
+            type: string
+            nullable: true
+
+        images:
+            type: array
+            items:
+                $ref: '#/components/schemas/WorkItemImage'

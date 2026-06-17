@@ -1,0 +1,261 @@
+/estimate/{id}:
+    get:
+        summary: Get estimate by ID
+        description: Returns a single estimate with all work items and images. Authenticated users can only access their own estimates.
+
+        tags:
+            - Estimate
+
+        security:
+            - bearerAuth: []
+
+        parameters:
+            - in: path
+              name: id
+              required: true
+              schema:
+                  type: integer
+              description: Estimate ID
+
+        responses:
+            '200':
+                description: Estimate fetched successfully
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Estimate'
+
+            '400':
+                description: Invalid estimate ID
+
+            '401':
+                description: Unauthorized user
+
+            '404':
+                description: Estimate not found
+
+            '500':
+                description: Internal server error
+
+/estimate/user:
+    get:
+        summary: Get user's estimates
+        description: Returns paginated estimates. Authenticated users see their own.
+
+        tags:
+            - Estimate
+
+        security:
+            - bearerAuth: []
+
+        parameters:
+            - in: query
+              name: page
+              schema:
+                  type: integer
+                  default: 1
+            - in: query
+              name: limit
+              schema:
+                  type: integer
+                  default: 10
+                  maximum: 100
+
+        responses:
+            '200':
+                description: Estimates fetched successfully
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/EstimateListResponse'
+
+            '401':
+                description: Unauthorized user
+
+            '403':
+                description: Admin access required
+
+            '500':
+                description: Internal server error
+
+    post:
+        summary: Submit estimate request
+
+        tags:
+            - Estimate
+
+        security:
+            - bearerAuth: []
+
+        requestBody:
+            required: true
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/CreateUserEstimateRequest'
+
+        responses:
+            201:
+                description: Estimate request submitted successfully
+
+    patch:
+        summary: Update user estimate request
+
+        tags:
+            - Estimate
+
+        security:
+            - bearerAuth: []
+
+        requestBody:
+            required: true
+            content:
+                application/json:
+                    schema:
+                        allOf:
+                            - $ref: '#/components/schemas/UpdateUserEstimateRequest'
+                            - type: object
+                              required:
+                                  - id
+                              properties:
+                                  id:
+                                      type: integer
+
+        responses:
+            200:
+                description: Estimate request updated successfully
+
+/estimate/admin:
+    get:
+        summary: Get Admin's submitted estimates
+        description: Returns paginated estimates. Admin sees all estimates.
+
+        tags:
+            - Estimate
+
+        security:
+            - bearerAuth: []
+
+        parameters:
+            - in: query
+              name: page
+              schema:
+                  type: integer
+                  default: 1
+            - in: query
+              name: limit
+              schema:
+                  type: integer
+                  default: 10
+                  maximum: 100
+
+        responses:
+            200:
+                description: Estimates fetched successfully
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/EstimateListResponse'
+
+            '401':
+                description: Unauthorized user
+
+            '403':
+                description: Admin access required
+
+            '500':
+                description: Internal server error
+
+    post:
+        summary: Create estimate as admin
+
+        tags:
+            - Estimate
+
+        security:
+            - bearerAuth: []
+
+        requestBody:
+            required: true
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/AdminCreateEstimateRequest'
+
+        responses:
+            201:
+                description: Estimate request submitted successfully
+
+    put:
+        summary: Update estimate as admin
+
+        tags:
+            - Estimate
+
+        security:
+            - bearerAuth: []
+
+        requestBody:
+            required: true
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/AdminUpdateEstimateRequest'
+
+        responses:
+            201:
+                description: Estimate request updated successfully
+
+/estimate/update-status/{id}/{status}:
+    patch:
+        summary: Update estimate status
+
+        tags:
+            - Estimate
+
+        security:
+            - bearerAuth: []
+
+        parameters:
+            - in: path
+              name: id
+              required: true
+              schema:
+                  type: integer
+
+            - in: path
+              name: status
+              required: true
+              schema:
+                  $ref: '#/components/schemas/EstimateStatus'
+
+        responses:
+            200:
+                description: Estimate deleted successfully
+
+            400:
+                description: Invalid estimate id
+
+/estimate/{id}:
+    delete:
+        summary: Delete estimate
+
+        tags:
+            - Estimate
+
+        security:
+            - bearerAuth: []
+
+        parameters:
+            - in: path
+              name: id
+              required: true
+              schema:
+                  type: integer
+
+        responses:
+            200:
+                description: Estimate deleted successfully
+
+            400:
+                description: Invalid estimate id
